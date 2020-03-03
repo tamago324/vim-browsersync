@@ -1,0 +1,144 @@
+*browsersync.txt*	browser-sync を Vim から使うためのプラグイン
+
+Version: 0.1.0
+Author: tamago324 <tamago_pad@yahoo.co.jp>
+License: MIT
+
+==============================================================================
+目次                                                    *browsersync-contents*
+
+概要                                                |browsersync-introduction|
+インストール方法                                         |browsersync-install|
+使用方法                                                   |browsersync-usage|
+インターフェース                                       |browsersync-interface|
+  コマンド                                              |browsersync-commands|
+  関数                                                 |browsersync-functions|
+設定例                                                  |browsersync-examples|
+更新履歴                                               |browsersync-changelog|
+
+
+
+==============================================================================
+概要                                                *browsersync-introduction*
+
+*browsersync* は browser-sync を Vim から使うためのプラグインです。
+
+要件:
+- *job_start()* が必要です。
+- `browser-sync` コマンド
+    - https://github.com/BrowserSync/browser-sync
+- *:BrowserSyncOpen* などのコマンドを使う場合、`open-browser.vim` が必要です。
+    - https://github.com/tyru/open-browser.vim
+
+
+==============================================================================
+インストール方法                                         *browsersync-install*
+
+まずは browser-sync をインストールします。
+>
+    $ yarn global add browser-sync
+<
+
+次に *browsersync* 自体をインストールします。
+>
+    Plug 'tamago324/vim-browsersync'
+<
+
+また、*:BrowserSyncOpen* などのコマンドを使う場合、`open-browser.vim` もインス
+トールします。
+>
+    Plug 'tyru/open-browser.vim'
+<
+
+
+==============================================================================
+使用方法                                                   *browsersync-usage*
+
+起動方法:
+
+`browser-sync` を起動したいディレクトリに移動し、Vim を起動します。
+<
+    $ git clone https://github.com/tamago324/vim-browsersync
+    $ cd ./vim-browsersync/example
+    $ vim
+>
+
+*:BrowserSyncStart* で `browser-sync` を起動します。
+<
+    :BrowserSyncStart
+>
+
+*:BrowserSyncOpen* でブラウザで開きます。
+<
+    :BrowserSyncOpen
+>
+`index.html` があるため、表示されます。
+また、ファイルを編集するごとにブラウザが自動で更新されます。
+
+
+停止方法:
+*:BrowserSyncStop* で停止します。
+<
+    :BrowserSyncStop
+>
+また、*job_start()* を使用しているため、Vim を終了すると `browser-sync` も停止
+します。
+
+
+==============================================================================
+インターフェース                                       *browsersync-interface*
+
+------------------------------------------------------------------------------
+コマンド                                                *browsersync-commands*
+
+:BrowserSyncStart                                          *:BrowserSyncStart*
+    `browser-sync` を `cwd` で開始します。
+
+:BrowserSyncStop                                            *:BrowserSyncStop*
+    `browser-sync` を停止します。
+
+:BrowserSyncOpen [{path}]                                   *:BrowserSyncOpen*
+    ブラウザで開きます。
+    {path} を指定した場合、そのパスを開きます。
+    {path} 指定しなかった場合、パスは無しとなり、`index.html` が表示されます。
+
+:BrowserSyncOpenUI                                        *:BrowserSyncOpenUI*
+   ブラウザで `browser-sync` の UI を開きます。
+
+
+------------------------------------------------------------------------------
+関数                                                   *browsersync-functions*
+
+browsersync#running()                                  *browsersync#running()*
+    `browser-sync` が開始している場合、`1` を返します。
+
+browsersync#port()                                        *browsersync#port()*
+    `browser-sync` のポート番号を返します。
+
+
+==============================================================================
+設定例                                                  *browsersync-examples*
+
+*browsersync#port()* を使って、lightline に実行中のポート番号を表示します。
+(サンプルのため、単純化しています。)
+
+>
+    function! LightlineBrowserSync() abort
+        return !empty(browsersync#port()) ? '󿤺:'.browsersync#port() : ''
+    endfunction
+
+    let g:lightline.component_function = {
+    \   't_browsersync': 'LightlineBrowserSync',
+    \}
+
+    let g:lightline.active.left = [[ 't_browsersync' ]]
+<
+
+
+==============================================================================
+更新履歴                                               *browsersync-changelog*
+
+0.1.0   2020-03-04
+    - 初版
+
+vim:tw=78:ts=4:ft=help:norl
