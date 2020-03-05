@@ -92,6 +92,15 @@ function! browsersync#open_ui() abort
     call s:open(str2nr(s:port) + 1)
 endfunction
 
+function! browsersync#relaod() abort
+    if !browsersync#running()
+        call s:echo_error(' [browser-sync] Not running')
+        return
+    endif
+
+    call system(printf('browser-sync reload --url http://localhost:%d', browsersync#port()))
+endfunction
+
 " You can use for lightline
 function! browsersync#port() abort
     if !browsersync#running()

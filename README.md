@@ -25,7 +25,11 @@ Plug 'tyru/open-browser.vim'
 
 ### :BrowserSyncOpen
 
+### :BrowserSyncOpenUI
+
 ### :BrowserSyncStop
+
+### :BrowserSyncReload
 
 
 ## License
