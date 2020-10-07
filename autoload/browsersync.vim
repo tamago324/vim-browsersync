@@ -36,7 +36,7 @@ function! browsersync#running() abort
     if s:job == v:null
         return v:false
     endif
-    return job_status(s:job) ==# 'run'
+    return jobwait([s:job], 0)[0] == -1
 endfunction
 
 
