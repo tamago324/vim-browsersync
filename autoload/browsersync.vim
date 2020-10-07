@@ -5,7 +5,7 @@ let s:info = ''
 let s:port = v:null
 
 function! s:start_job(cmd, options)
-    let s:job = job_start([&shell, &shellcmdflag, a:cmd], {
+    let s:job = jobstart([&shell, &shellcmdflag, a:cmd], {
     \   'out_cb': { job_id, data -> a:options.on_out(data)},
     \   'err_cb': { job_id, data -> a:options.on_err(data)},
     \   'cwd': a:options.cwd,
