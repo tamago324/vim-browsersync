@@ -1,6 +1,6 @@
 # vim-browsersync
 
-This plugin uses [browser-sync](https://github.com/BrowserSync/browser-sync) from Vim.
+This plugin uses [browser-sync](https://github.com/BrowserSync/browser-sync) from (neo)vim.
 
 * Require
   * `job_start()` feature.
