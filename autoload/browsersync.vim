@@ -5,11 +5,19 @@ let s:info = ''
 let s:port = v:null
 
 function! s:start_job(cmd, options)
-    let s:job = job_start([&shell, &shellcmdflag, a:cmd], {
-    \   'out_cb': { job_id, data -> a:options.on_out(data)},
-    \   'err_cb': { job_id, data -> a:options.on_err(data)},
-    \   'cwd': a:options.cwd,
-    \})
+    if has("nvim")
+        let s:job = jobstart([&shell, &shellcmdflag, a:cmd], {
+        \   'out_cb': { job_id, data -> a:options.on_out(data)},
+        \   'err_cb': { job_id, data -> a:options.on_err(data)},
+        \   'cwd': a:options.cwd,
+        \})
+    else
+        let s:job = job_start([&shell, &shellcmdflag, a:cmd], {
+        \   'out_cb': { job_id, data -> a:options.on_out(data)},
+        \   'err_cb': { job_id, data -> a:options.on_err(data)},
+        \   'cwd': a:options.cwd,
+        \})
+    endif
 endfunction
 
 function! s:echo_error(msg) abort
@@ -36,7 +44,11 @@ function! browsersync#running() abort
     if s:job == v:null
         return v:false
     endif
-    return job_status(s:job) ==# 'run'
+    if has("nvim")
+        return jobwait([s:job], 0)[0] == -1
+    else
+        return job_status(s:job) ==# 'run'
+    endif
 endfunction
 
 
