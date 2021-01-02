@@ -3,7 +3,7 @@
 This plugin uses [browser-sync](https://github.com/BrowserSync/browser-sync) from Vim.
 
 * Require
-  * `job_start()` feature.
+  * `job_start()` feature. (jobstart on NeoVim)
   * [browser-sync](https://github.com/BrowserSync/browser-sync)
 * Optional
   * [open-browser.vim](https://github.com/tyru/open-browser.vim)
