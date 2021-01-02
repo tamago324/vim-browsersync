@@ -79,7 +79,11 @@ endfunction
 " browser-sync を停止
 function! browsersync#stop() abort
     if browsersync#running()
-        call job_stop(s:job)
+        if has("nvim")
+            call jobstop(s:job)
+        else
+            call job_stop(s:job)
+        endif
         echohl Identifier
         echomsg ' [browser-sync] stoped'
         echohl None
