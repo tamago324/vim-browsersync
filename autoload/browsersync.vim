@@ -119,7 +119,7 @@ function! s:open(port, path) abort
 endfunction
 
 function! browsersync#open(...) abort
-    let l:path = a:0 > 0 ? a:0 : ''
+    let l:path = a:0 > 0 ? a:1 : ''
     call s:open(s:port, l:path)
 endfunction
 
