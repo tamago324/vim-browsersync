@@ -124,7 +124,7 @@ function! browsersync#open(...) abort
 endfunction
 
 function! browsersync#open_ui() abort
-    call s:open(str2nr(s:port) + 1)
+    call s:open(str2nr(s:port) + 1, '')
 endfunction
 
 function! browsersync#relaod() abort
