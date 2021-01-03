@@ -7,8 +7,8 @@ let s:port = v:null
 function! s:start_job(cmd, options)
     if has("nvim")
         let s:job = jobstart([&shell, &shellcmdflag, a:cmd], {
-        \   'out_cb': { job_id, data -> a:options.on_out(data)},
-        \   'err_cb': { job_id, data -> a:options.on_err(data)},
+        \   'on_stdout': { job_id, data -> a:options.on_out(data)},
+        \   'on_stderr': { job_id, data -> a:options.on_err(data)},
         \   'cwd': a:options.cwd,
         \})
     else
@@ -26,12 +26,31 @@ function! s:echo_error(msg) abort
     echohl None
 endfunction
 
-function! s:on_out(line) abort
-    let s:info = s:info . a:line . '\n'
-    if a:line !~# 'Local'
+function! s:on_err(data) abort
+    if type(a:data) ==# v:t_list
+        " For nvim
+        for l:line in a:data
+            call s:on_err(l:line)
+        endfor
         return
     endif
-    let s:port = matchstr(a:line, '\v:\zs\d+$')
+    call s:echo_error(a:data)
+endfunction
+
+function! s:on_out(data) abort
+    if type(a:data) ==# v:t_list
+        " For nvim
+        for l:line in a:data
+            call s:on_out(l:line)
+        endfor
+        return
+    endif
+
+    let s:info = s:info . a:data . '\n'
+    if a:data !~# 'Local'
+        return
+    endif
+    let s:port = matchstr(a:data, '\v:\zs\d+$')
 endfunction
 
 function! s:echo_msg(msg) abort
@@ -61,7 +80,7 @@ function! browsersync#start() abort
 
     let l:opts = {
     \   'on_out': function('s:on_out'),
-    \   'on_err': function('s:echo_error'),
+    \   'on_err': function('s:on_err'),
     \   'cwd': getcwd(),
     \}
     call s:start_job(l:cmd, l:opts)
