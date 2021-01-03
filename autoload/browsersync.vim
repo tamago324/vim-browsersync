@@ -114,8 +114,8 @@ function! s:open(port, path) abort
         call s:echo_error(' [browser-sync] Not running')
         return
     endif
-    let l:path = empty(a:path) || a:path =~# '^/'? a:path : '/'.a:path
-    call openbrowser#open(printf('localhost:%d%s', a:port, l:path))
+    let l:slash = (empty(a:path) || (a:path =~# '^/')) ? '' : '/'
+    call openbrowser#open(printf('localhost:%d%s%s', a:port, l:slash, a:path))
 endfunction
 
 function! browsersync#open(...) abort
